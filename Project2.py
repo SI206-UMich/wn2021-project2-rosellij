@@ -182,6 +182,21 @@ class TestCases(unittest.TestCase):
             self.assertEqual(type(anytuple[2]), int)
         # check that the first book in the search has 337 pages
         self.assertEqual(summaries[0][2], 337)
+        
+    def test_summarize_best_books(self):
+        # call summarize_best_books and save it to a variable
+        bestbooksummaries = summarize_best_books()
+        # check that we have the right number of best books (20)
+        self.assertEqual(len(bestbooksummaries), 20)
+        for anyentry in bestbooksummaries:
+        # assert each item in the list of best books is a tuple
+            self.assertEqual(type(anyentry), tuple)
+        # check that each tuple has a length of 3
+            self.assertEqual(len(anyentry), 3)
+        # check that the first tuple is made up of the following 3 strings:'Fiction', "The Midnight Library", 'https://www.goodreads.com/choiceawards/best-fiction-books-2020'
+        self.assertEqual(bestbooksummaries[0], ('Fiction', 'The Midnight Library', 'https://www.goodreads.com/choiceawards/best-fiction-books-2020'))
+        # check that the last tuple is made up of the following 3 strings: 'Picture Books', 'Antiracist Baby', 'https://www.goodreads.com/choiceawards/best-picture-books-2020'
+        self.assertEqual(bestbooksummaries[-1], ('Picture Books', 'Antiracist Baby', 'https://www.goodreads.com/choiceawards/best-picture-books-2020'))
 
 if __name__ == '__main__':
     print(extra_credit("extra_credit.htm"))
