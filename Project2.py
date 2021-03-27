@@ -39,7 +39,11 @@ def get_search_links():
 
     """
 
-    pass
+    textvar = requests.get("https://www.goodreads.com/search?q=fantasy&qid=NwUsLiA2Nc").text
+    workingsoup = BeautifulSoup(textvar, 'html.parser')
+    bookentries = workingsoup.find_all('tr', itemtype = "http://schema.org/Book")[:10]
+    return_list = ["https://www.goodreads.com/book/show/" + anyentry.find('a')['href'] for anyentry in bookentries]
+    return return_list
 
 
 def get_book_summary(book_url):
