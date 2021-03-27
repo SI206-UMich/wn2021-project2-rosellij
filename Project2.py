@@ -70,7 +70,7 @@ def get_book_summary(book_url):
     return (booktitle.strip('\n').strip(), bookauthor.strip('\n').strip(), numpages.strip('\n').strip())
 
 
-def summarize_best_books(filepath = None):
+def summarize_best_books(filepath = None): # implement OS filepath stuff!
     """
     Write a function to get a list of categories, book title and URLs from the "BEST BOOKS OF 2020"
     page in "best_books_2020.htm". This function should create a BeautifulSoup object from a 
@@ -89,9 +89,9 @@ def summarize_best_books(filepath = None):
     workingsoup = BeautifulSoup(readvar, 'html.parser')
     resultsholderlist = workingsoup.find_all('div', class_ = 'category clearFix')
     return_list = [(anyentry.find('h4', class_ = 'category__copy').text.strip('\n'),
-    anyentry.find('img', class_ = 'category__winnerImage')['alt'].strip('\n'),
-    anyentry.find('a')['href'].strip('\n'))
-     for anyentry in resultsholderlist]
+        anyentry.find('img', class_ = 'category__winnerImage')['alt'].strip('\n'),
+        anyentry.find('a')['href'].strip('\n'))
+        for anyentry in resultsholderlist]
     return return_list
 
 
@@ -115,7 +115,13 @@ def write_csv(data, filename):
 
     This function should not return anything.
     """
-    pass
+
+    filevar = open(filename, 'w')
+    filevar.write("Book title,Author Name\n")
+    for anyentry in data:
+            filevar.write(anyentry[0].replace(",", "&#44") + ',' + anyentry[1].replace(",", "&#44") + "\n")
+    filevar.close()
+    return None
 
 
 def extra_credit(filepath):
