@@ -70,7 +70,7 @@ def get_book_summary(book_url):
     return (booktitle, bookauthor, numpages)
 
 
-def summarize_best_books(filepath = None): # implement OS filepath stuff!
+def summarize_best_books(filepath = os.path.join(os.path.dirname(__file__), 'best_books_2020.htm')):
     """
     Write a function to get a list of categories, book title and URLs from the "BEST BOOKS OF 2020"
     page in "best_books_2020.htm". This function should create a BeautifulSoup object from a 
@@ -82,7 +82,7 @@ def summarize_best_books(filepath = None): # implement OS filepath stuff!
     to your list of tuples.
     """
 
-    filevar = open('best_books_2020.htm', 'r')
+    filevar = open(filepath, 'r')
     readvar = filevar.read()
     filevar.close()
 
@@ -140,7 +140,6 @@ class TestCases(unittest.TestCase):
         self.search_urls = get_search_links()
 
     def test_get_titles_from_search_results(self):
-        return None
         # call get_titles_from_search_results() on search_results.htm and save to a local variable
         workingtitles = get_titles_from_search_results('search_results.htm')
         # check that the number of titles extracted is correct (20 titles)
@@ -156,7 +155,6 @@ class TestCases(unittest.TestCase):
         self.assertEqual(workingtitles[-1][0], 'Harry Potter: The Prequel (Harry Potter, #0.5)')
 
     def test_get_search_links(self):
-        return None
         # check that TestCases.search_urls is a list
         self.assertEqual(type(self.search_urls), list)
         # check that the length of TestCases.search_urls is correct (10 URLs)
@@ -168,7 +166,6 @@ class TestCases(unittest.TestCase):
             self.assertTrue('www.goodreads.com/book/show/' in anyentry)
 
     def test_get_book_summary(self):
-        return None
         # create a local variable – summaries – a list containing the results from get_book_summary()
         # for each URL in TestCases.search_urls (should be a list of tuples)
         summaries = [get_book_summary(anyurl) for anyurl in self.search_urls]
@@ -187,7 +184,6 @@ class TestCases(unittest.TestCase):
         self.assertEqual(summaries[0][2], 337)
         
     def test_summarize_best_books(self):
-        return None
         # call summarize_best_books and save it to a variable
         bestbooksummaries = summarize_best_books()
         # check that we have the right number of best books (20)
@@ -217,8 +213,8 @@ class TestCases(unittest.TestCase):
         # check that the header row is correct
         self.assertEqual(csv_lines[0], ['Book title', 'Author Name'])
         # check that the next row is 'Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling'
-        self.assertEqual(csv_lines[1], ['Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling']) # fix this!
-        # check that the last row is 'Harry Potter: The Prequel (Harry Potter, #0.5)', 'J.K. Rowling' # fix this!
+        self.assertEqual(csv_lines[1], ['Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling'])
+        # check that the last row is 'Harry Potter: The Prequel (Harry Potter, #0.5)', 'J.K. Rowling'
         self.assertEqual(csv_lines[-1], ['Harry Potter: The Prequel (Harry Potter, #0.5)', 'J.K. Rowling'])
 
 if __name__ == '__main__':
