@@ -64,10 +64,10 @@ def get_book_summary(book_url):
     workingsoup = BeautifulSoup(textvar, 'html.parser')
     bookdata = workingsoup.find('div', id = 'metacol', class_ = 'last col')
     (booktitle, bookauthor, numpages) = (
-        bookdata.find('h1', id = 'bookTitle').text, 
-        bookdata.find('div', id = 'bookAuthors').find('span', itemprop = 'name').text, 
-        bookdata.find('div', id = 'details').find('span', itemprop = 'numberOfPages').text)
-    return (booktitle.strip('\n').strip(), bookauthor.strip('\n').strip(), numpages.strip('\n').strip())
+        bookdata.find('h1', id = 'bookTitle').text.strip('\n').strip(), 
+        bookdata.find('div', id = 'bookAuthors').find('span', itemprop = 'name').text.strip('\n').strip(), 
+        int(bookdata.find('div', id = 'details').find('span', itemprop = 'numberOfPages').text.strip('\n').strip().rstrip(' pages')))
+    return (booktitle, bookauthor, numpages)
 
 
 def summarize_best_books(filepath = None): # implement OS filepath stuff!
@@ -164,6 +164,24 @@ class TestCases(unittest.TestCase):
             self.assertEqual(type(anyentry), str)
             # check that each URL contains the correct url for Goodreads.com followed by /book/show/
             self.assertTrue('www.goodreads.com/book/show/' in anyentry)
+
+    def test_get_book_summary(self):
+        # create a local variable – summaries – a list containing the results from get_book_summary()
+        # for each URL in TestCases.search_urls (should be a list of tuples)
+        summaries = [get_book_summary(anyurl) for anyurl in self.search_urls]
+        # check that the number of book summaries is correct (10)
+        self.assertEqual(len(summaries), 10)
+        for anytuple in summaries:
+            # check that each item in the list is a tuple
+            self.assertEqual(type(anytuple), tuple)
+            # check that each tuple has 3 elements
+            self.assertEqual(len(anytuple), 3)
+            # check that the first two elements in the tuple are string
+            self.assertTrue(type(anytuple[0]) == str and type(anytuple[1]) == str)
+            # check that the third element in the tuple, i.e. pages is an int
+            self.assertEqual(type(anytuple[2]), int)
+        # check that the first book in the search has 337 pages
+        self.assertEqual(summaries[0][2], 337)
 
 if __name__ == '__main__':
     print(extra_credit("extra_credit.htm"))
