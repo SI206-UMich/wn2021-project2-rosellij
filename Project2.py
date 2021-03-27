@@ -15,7 +15,14 @@ def get_titles_from_search_results(filename):
     [('Book title 1', 'Author 1'), ('Book title 2', 'Author 2')...]
     """
 
-    pass
+    filevar = open(filename, 'r')
+    readvar = filevar.read()
+    filevar.close()
+    
+    workingsoup = BeautifulSoup(readvar, 'html.parser')
+    resultsvar1 = workingsoup.find_all('td', width = '100%')
+    newitems = [(anyentry.find('a', class_ = "bookTitle").find('span').text, anyentry.find('a', class_ = "authorName").find('span').text) for anyentry in resultsvar1]
+    return newitems
 
 
 def get_search_links():
