@@ -118,9 +118,8 @@ def write_csv(data, filename):
 
     filevar = open(filename, 'w')
     filevar.write("Book title,Author Name\n")
-    for anyentry in data:
-            anyentry = tuple('"' + subentry + '"' if ',' in subentry else subentry for subentry in anyentry )
-            filevar.write(anyentry[0] + ',' + anyentry[1] + "\n")
+    csvwriter = csv.writer(filevar)
+    csvwriter.writerows([list(anyentry) for anyentry in data])
     filevar.close()
     return None
 
@@ -210,16 +209,17 @@ class TestCases(unittest.TestCase):
         write_csv(titlesvar, 'test.csv')
         # read in the csv that you wrote (create a variable csv_lines - a list containing all the lines in the csv you just wrote to above)
         filevar = open('test.csv', 'r')
-        csv_lines = filevar.readlines()
+        csvreader = csv.reader(filevar)
+        csv_lines = [row for row in csvreader]
         filevar.close()
         # check that there are 21 lines in the csv
         self.assertEqual(len(csv_lines), 21)
         # check that the header row is correct
-        self.assertEqual(csv_lines[0].strip('\n'), 'Book title,Author Name')
+        self.assertEqual(csv_lines[0], ['Book title', 'Author Name'])
         # check that the next row is 'Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling'
-        self.assertEqual(csv_lines[1].strip('\n').split(','), ['Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling'])
-        # check that the last row is 'Harry Potter: The Prequel (Harry Potter, #0.5)', 'J.K. Rowling'
-        self.assertEqual(csv_lines[-1].strip('\n').split(','), ['Harry Potter: The Prequel (Harry Potter, #0.5)', 'J.K. Rowling'])
+        self.assertEqual(csv_lines[1], ['Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling']) # fix this!
+        # check that the last row is 'Harry Potter: The Prequel (Harry Potter, #0.5)', 'J.K. Rowling' # fix this!
+        self.assertEqual(csv_lines[-1], ['Harry Potter: The Prequel (Harry Potter, #0.5)', 'J.K. Rowling'])
 
 if __name__ == '__main__':
     print(extra_credit("extra_credit.htm"))
