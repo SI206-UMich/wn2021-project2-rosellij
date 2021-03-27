@@ -42,7 +42,7 @@ def get_search_links():
     textvar = requests.get("https://www.goodreads.com/search?q=fantasy&qid=NwUsLiA2Nc").text
     workingsoup = BeautifulSoup(textvar, 'html.parser')
     bookentries = workingsoup.find_all('tr', itemtype = "http://schema.org/Book")[:10]
-    return_list = ["https://www.goodreads.com/book/show/" + anyentry.find('a')['href'] for anyentry in bookentries]
+    return_list = ["https://www.goodreads.com" + anyentry.find('a')['href'] for anyentry in bookentries]
     return return_list
 
 
@@ -154,6 +154,16 @@ class TestCases(unittest.TestCase):
         # check that the last title is correct (open search_results.htm and find it)
         self.assertEqual(workingtitles[-1][0], 'Harry Potter: The Prequel (Harry Potter, #0.5)')
 
+    def test_get_search_links(self):
+        # check that TestCases.search_urls is a list
+        self.assertEqual(type(self.search_urls), list)
+        # check that the length of TestCases.search_urls is correct (10 URLs)
+        self.assertEqual(len(self.search_urls), 10)
+        for anyentry in self.search_urls:
+            # check that each URL in the TestCases.search_urls is a string
+            self.assertEqual(type(anyentry), str)
+            # check that each URL contains the correct url for Goodreads.com followed by /book/show/
+            self.assertTrue('www.goodreads.com/book/show/' in anyentry)
 
 if __name__ == '__main__':
     print(extra_credit("extra_credit.htm"))
