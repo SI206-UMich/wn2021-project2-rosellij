@@ -131,7 +131,17 @@ def extra_credit(filepath):
     Please see the instructions document for more information on how to complete this function.
     You do not have to write test cases for this function.
     """
-    pass
+    
+    workingregex = r"[A-Z]\w{2,}(?: [A-Z]\w*)+"
+    filevar = open(filepath, 'r')
+    readvar = filevar.read()
+    filevar.close()
+    if 'www.goodreads.com/book/show/' in readvar:
+        workingsoup = BeautifulSoup(readvar, 'html.parser')
+    workingtags = workingsoup.find('div', id = 'descriptionContainer').find_all('span')
+    desc = workingtags[-1].text
+    resultslist = re.findall(workingregex, desc)
+    return resultslist
 
 class TestCases(unittest.TestCase):
 
